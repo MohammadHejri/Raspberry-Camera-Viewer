@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity implements HBRecorderListene
         recordImageView.setOnClickListener(v -> recordImageViewOnClickAction());
         videosImageView.setOnClickListener(v -> videosImageViewOnClickAction());
         settingsImageView.setOnClickListener(v -> settingsImageViewOnClickAction());
+
+        String savedUrl = sharedPreferences.getString("URL", "");
+        if (savedUrl.isEmpty())
+            showConnectionHintDialog();
     }
 
     @Override
@@ -164,6 +168,16 @@ public class MainActivity extends AppCompatActivity implements HBRecorderListene
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
         ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
+    }
+
+    private void showConnectionHintDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Connect to server");
+        builder.setMessage("You have not set your server's IP yet.\n\nOpen your hotspot and " +
+                "enter your raspberry server IP, appending `:8000`.\n\nExample: 192.168.12.345:8000");
+        builder.setNeutralButton("Okay", (dialog, which) -> {});
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void connectImageViewOnClickAction() {
